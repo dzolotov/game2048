@@ -54,17 +54,21 @@ class StartScreen extends HookWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  context.go('/game');
-                },
+                onPressed: () => context.go('/game'),
                 child: const Text('1️⃣ Start'),
               ),
               const Divider(),
               ElevatedButton(
-                onPressed: () {
-                  context.go('/manual');
-                },
+                onPressed: () => context.go('/manual'),
                 child: const Text('2⃣ Manual'),
+              ),
+              const Divider(),
+              ElevatedButton(
+                onPressed: () => context.go('/fame'),
+                child: const Text('Hall of Fame'),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               Transform.scale(
                 scaleY: -1, //flip the fire

@@ -1,3 +1,4 @@
+import 'package:game2048/navigation/transition.dart';
 import 'package:game2048/screen/hall_of_fame.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,17 +11,31 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const StartScreen(),
+      pageBuilder: (context, state) => FadeTransitionPage(
+        key: state.pageKey,
+        child: const StartScreen(),
+      ),
     ),
     GoRoute(
       path: '/game',
-      builder: (context, state) => const GameScreen(),
+      pageBuilder: (context, state) => FadeTransitionPage(
+        key: state.pageKey,
+        child: const GameScreen(),
+      ),
     ),
     GoRoute(
       path: '/manual',
-      builder: (context, state) => const ManualScreen(),
+      pageBuilder: (context, state) => FadeTransitionPage(
+        key: state.pageKey,
+        child: const ManualScreen(),
+      ),
     ),
     GoRoute(
-        path: '/fame', builder: (context, state) => const HallOfFameScreen()),
+      path: '/fame',
+      pageBuilder: (context, state) => FadeTransitionPage(
+        key: state.pageKey,
+        child: const HallOfFameScreen(),
+      ),
+    ),
   ],
 );
