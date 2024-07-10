@@ -1,4 +1,5 @@
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 extension type Player(JSObject _) implements JSObject {
   external String nickname;
@@ -7,3 +8,5 @@ extension type Player(JSObject _) implements JSObject {
 
   external String greeting();
 }
+
+Player get currentPlayer => globalContext.getProperty('player'.toJS) as Player;

@@ -1,6 +1,3 @@
-import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,8 +13,9 @@ class StartScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final player =
-        useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
+    final player = currentPlayer;
+    // final player =
+    //     useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
     useEffect(() {
       final soundController = context.read<GameSoundController>();
       soundController.background();

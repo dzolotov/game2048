@@ -17,8 +17,10 @@ void main() async {
     usePathUrlStrategy();
   }
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => GameState(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => GameState()),
+      ],
       child: const AppWidget(),
     ),
   );

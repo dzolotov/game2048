@@ -11,8 +11,7 @@ import 'package:provider/provider.dart';
 import '../controllers/game_sound.dart';
 import '../game/data.dart';
 import '../game/state.dart';
-import '../interop/fame.dart';
-import '../interop/player.dart';
+import '../interop/export.dart';
 import '../widgets/empty_slot.dart';
 import '../widgets/number_slot.dart';
 import 'intents/action.dart';
@@ -49,8 +48,11 @@ class GameScreen extends HookWidget {
         ),
       ),
     );
-    final player = globalContext.getProperty('player'.toJS) as Player;
-    final fame = globalContext.getProperty('fame'.toJS) as Fame;
+    final player = currentPlayer;
+    // final player =
+    //     useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
+    // final fame =
+    //     useMemoized(() => globalContext.getProperty('fame'.toJS) as Fame);
     fame.add(player.nickname, state.score);
     state.reset();
     context.go('/fame');
