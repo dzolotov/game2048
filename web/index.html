@@ -22,7 +22,9 @@
 <body>
 <div id="tap_to_start"
      style="visibility: hidden; left: 50%; top: 50%; transform: translate(-50%,-50%); position: absolute;">
-    <button id="tap_to_start_button" style="; padding: 8px; font-size: 24pt; font-family:Roboto">Tap to start</button>
+    <button id="tap_to_start_button" style="padding: 8px; font-size: 24pt; font-family:Roboto">Tap
+        to start
+    </button>
 </div>
 <div id="loader"
      style="left: 50%; top: 50%; transform: translate(-50%,-50%); position: absolute; font-size: 16pt; font-family:Roboto"></div>
@@ -40,6 +42,12 @@
         divLoader.style.display = "none";
         tapToStart.style.visibility = "visible";
         const button = document.querySelector("#tap_to_start_button");
+        //prefetch audio
+        const audio = ["assets/assets/Sakura-Girl-Daisy-chosic.com_original.mp3", "assets/assets/A.Cooper-LastTrack.mp3"];
+        for (index in audio) {
+          const audioElement = document.createElement('audio');
+          audioElement.src = audio[index];
+        };
         button.onclick = async function () {
           tapToStart.style.display = "none";
           await appRunner.runApp();

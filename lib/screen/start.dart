@@ -49,7 +49,7 @@ class StartScreen extends HookWidget {
                     },
                     autofocus: true,
                     decoration: const InputDecoration(hintText: 'Player name'),
-                    onChanged: (name) => player.nickname = name,
+                    onChanged: (name) => player.setName(name),
                   ),
                 ),
               ),

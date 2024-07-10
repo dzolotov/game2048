@@ -20,7 +20,7 @@ class GameSoundController {
       return;
     }
     isBackground = false;
-    await audioPlayer?.play(AssetSource('Sakura-Girl-Daisy-chosic.com_.mp3'));
+    await audioPlayer?.play(AssetSource('Sakura-Girl-Daisy-chosic.com_original.mp3'));
     audioPlayer?.setVolume(0.3);
     subscription = audioPlayer?.onPlayerStateChanged.listen((state) async {
       if (state == PlayerState.completed) {
@@ -35,7 +35,7 @@ class GameSoundController {
       return;
     }
     isBackground = true;
-    await audioPlayer?.play(AssetSource('A. Cooper - Last Track.mp3'));
+    await audioPlayer?.play(AssetSource('A.Cooper-LastTrack.mp3'));
     audioPlayer?.setVolume(0.3);
     subscription = audioPlayer?.onPlayerStateChanged.listen((state) async {
       if (state == PlayerState.completed) {

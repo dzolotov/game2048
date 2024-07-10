@@ -16,7 +16,7 @@ ADD shaders /tmp/shaders
 
 RUN flutter pub get
 
-RUN flutter build web
+RUN flutter build web --web-renderer=canvaskit
 
 FROM nginx
 
