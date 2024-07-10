@@ -44,26 +44,19 @@ class NumberSlot extends HookWidget {
       colorIndex = colors.length - 1;
     }
     final p = number.toString();
-    return MouseRegion(
-      cursor: SystemMouseCursors.move,
-      onEnter: (_) => selected.value = true,
-      onExit: (_) => selected.value = false,
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, _) => Container(
-          decoration: const BoxDecoration(color: Colors.white),
-          foregroundDecoration: BoxDecoration(color: colors[colorIndex]),
-          margin: EdgeInsets.all(8.0 - 6 * animation.value),
-          // padding: EdgeInsets.all(0),
-          // padding: EdgeInsets.all(8.0 - 6 * animation.value),
-          // margin: EdgeInsets.all(6 * animation.value),
-          child: Center(
-            child: Text(
-              p,
-              style: TextStyle(
-                  fontSize: fontSizes[p.length - 1].toDouble(),
-                  fontFamily: 'Roboto',
-                  color: Colors.black),
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, _) => Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        foregroundDecoration: BoxDecoration(color: colors[colorIndex]),
+        margin: EdgeInsets.all(8.0 - 6 * animation.value),
+        child: Center(
+          child: Text(
+            p,
+            style: TextStyle(
+              fontSize: fontSizes[p.length - 1].toDouble(),
+              fontFamily: 'Roboto',
+              color: Colors.black,
             ),
           ),
         ),

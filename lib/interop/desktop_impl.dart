@@ -1,4 +1,4 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FameEntry {
   String player = '';
@@ -48,8 +48,8 @@ void registerIFrame() {}
 
 Future<void> showNotification(int id, String title, String body) async {
   //now only MacOS is supported
-  final notificationDetails =
-      NotificationDetails(macOS: DarwinNotificationDetails());
-  final plugin = FlutterLocalNotificationsPlugin();
-  await plugin.show(id, title, body, notificationDetails);
+  // final notificationDetails =
+  //     NotificationDetails(macOS: DarwinNotificationDetails());
+  // final plugin = FlutterLocalNotificationsPlugin();
+  // await plugin.show(id, title, body, notificationDetails);
 }

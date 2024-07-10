@@ -41,15 +41,7 @@ Player get currentPlayer => globalContext.getProperty('player'.toJS) as Player;
 bool get confirmForceQuit => window.confirm('Are you sure to drop the game?');
 
 void registerIFrame() {
-  ui_web.PlatformViewRegistry().registerViewFactory(
-    'manual',
-    (_) {
-      return HTMLIFrameElement()
-        ..width = '100%'
-        ..height = '100%'
-        ..src = 'https://ru.wikipedia.org/wiki/2048_(игра)';
-    },
-  );
+
 }
 
 Future<void> showNotification(int id, String title, String body) async {}

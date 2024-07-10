@@ -17,7 +17,7 @@ dependencies:
   audioplayers:
   flutter_hooks: ^0.20.0
   universal_platform: ^1.0.0+1
-  flutter_local_notifications:
+#  flutter_local_notifications:
   # flutter_webview only for Android/iOS
   #  flutter_inappwebview:
 

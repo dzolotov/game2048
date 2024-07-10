@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../interop/universal_export.dart';
+import '../interop/web_impl.dart';
 
 class ManualScreen extends StatefulWidget {
   const ManualScreen({super.key});
@@ -22,7 +22,7 @@ class _ManualScreenState extends State<ManualScreen> {
 
   @override
   Widget build(BuildContext context) => kIsWeb
-      ? const HtmlElementView(viewType: 'manual')
+      ? const SizedBox.shrink() //todo: replace with HTMLElementView
       : Scaffold(
           appBar: AppBar(),
           body: const SizedBox.shrink(),

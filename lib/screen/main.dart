@@ -17,7 +17,7 @@ class AppWidget extends HookWidget {
       gameSoundController.init();
       return gameSoundController.dispose;
     });
-    precacheImage(const AssetImage('/assets/fail_stamp.jpg'), context);
+    // precacheImage(const AssetImage('assets/fail_stamp.jpg'), context);
     return Provider.value(
       value: gameSoundController,
       child: UniversalPlatform.isMacOS
