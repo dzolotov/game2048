@@ -1,5 +1,5 @@
-import 'package:game2048/navigation/transition.dart';
-import 'package:game2048/screen/hall_of_fame.dart';
+import 'transition.dart';
+import '../screen/hall_of_fame.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screen/game.dart';

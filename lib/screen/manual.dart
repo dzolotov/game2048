@@ -1,7 +1,7 @@
-import 'dart:ui_web' as ui_web;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:web/web.dart';
+
+import '../interop/universal_export.dart';
 
 class ManualScreen extends StatefulWidget {
   const ManualScreen({super.key});
@@ -11,21 +11,20 @@ class ManualScreen extends StatefulWidget {
 }
 
 class _ManualScreenState extends State<ManualScreen> {
+  // late InAppWebViewController _controller;
+
   @override
   void initState() {
     super.initState();
-    ui_web.PlatformViewRegistry().registerViewFactory(
-      'manual',
-      (_) {
-        return HTMLIFrameElement()
-          ..width = '100%'
-          ..height = '100%'
-          ..src = 'https://ru.wikipedia.org/wiki/2048_(игра)';
-      },
-    );
+    // showNotification(1, 'Manual is shown', 'Manual page is opened');
+    registerIFrame(); //only for Flutter Web
   }
 
   @override
-  Widget build(BuildContext context) =>
-      const HtmlElementView(viewType: 'manual');
+  Widget build(BuildContext context) => kIsWeb
+      ? const HtmlElementView(viewType: 'manual')
+      : Scaffold(
+          appBar: AppBar(),
+          body: const SizedBox.shrink(),
+        ); //todo: in app webview
 }

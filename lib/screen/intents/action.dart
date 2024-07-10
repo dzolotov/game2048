@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web/web.dart';
+import '../../interop/desktop_impl.dart';
 
 import '../../game/state.dart';
 import 'intent.dart';
@@ -23,8 +23,7 @@ class DropGameAction extends Action<DropGameIntent> {
 
   @override
   Object? invoke(DropGameIntent intent) {
-    final result = window.confirm('Are you sure to drop the game?');
-    if (result) {
+    if (confirmForceQuit) {
       state.fail();
     }
     return null;

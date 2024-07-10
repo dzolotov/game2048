@@ -1,6 +1,3 @@
-import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../controllers/game_sound.dart';
 import '../game/data.dart';
 import '../game/state.dart';
-import '../interop/export.dart';
+import '../interop/universal_export.dart';
 import '../widgets/empty_slot.dart';
 import '../widgets/number_slot.dart';
 import 'intents/action.dart';
@@ -40,7 +37,7 @@ class GameScreen extends HookWidget {
                 image: DecorationImage(
                   colorFilter:
                       ColorFilter.mode(Colors.white, BlendMode.multiply),
-                  image: AssetImage('assets/Fail_stamp.jpg'),
+                  image: AssetImage('assets/fail_stamp.jpg'),
                 ),
               ),
             ),
@@ -65,8 +62,7 @@ class GameScreen extends HookWidget {
       soundController.ingame();
       return soundController;
     });
-    final player =
-        useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
+    final player = currentPlayer;
 
     final state = context.watch<GameState>();
     if (state.forceFailed) {

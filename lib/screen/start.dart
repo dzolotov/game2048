@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:game2048/controllers/game_sound.dart';
-import 'package:game2048/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../interop/player.dart';
+import '../controllers/game_sound.dart';
+import '../interop/universal_export.dart';
+import '../main.dart';
 
 class StartScreen extends HookWidget {
   const StartScreen({super.key});
@@ -57,7 +57,7 @@ class StartScreen extends HookWidget {
               ),
               const Divider(),
               ElevatedButton(
-                onPressed: () => context.go('/manual'),
+                onPressed: () => context.push('/manual'),
                 child: const Text('2⃣ Manual'),
               ),
               const Divider(),

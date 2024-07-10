@@ -1,12 +1,10 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/game_sound.dart';
-import '../interop/export.dart';
+import '../interop/universal_export.dart';
 
 class HallOfFameEntry extends StatelessWidget {
   final String login;
@@ -46,7 +44,10 @@ class HallOfFameScreen extends HookWidget {
     //     useMemoized(() => globalContext.getProperty('fame'.toJS) as Fame);
     final records = fameRecords; //universal
     records.sort((a, b) => -a.score.compareTo(b.score));
-    final empty = JSObject() as FameEntry;
+    // final empty = JSObject() as FameEntry;
+    // empty.player = '';
+    // empty.score = -1;
+    final empty = createEmpty();
     empty.player = '';
     empty.score = -1;
     while (records.length < maxPlayers) {
@@ -105,10 +106,10 @@ class HallOfFameScreen extends HookWidget {
                     const TableRow(
                       children: [
                         SizedBox(
-                          height: 12,
+                          height: 8,
                         ),
                         SizedBox(
-                          height: 12,
+                          height: 8,
                         ),
                       ],
                     )
