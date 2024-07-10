@@ -4,7 +4,9 @@ import 'dart:js_interop_unsafe';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../controllers/game_sound.dart';
 import '../interop/fame.dart';
 
 class HallOfFameEntry extends StatelessWidget {
@@ -36,6 +38,11 @@ class HallOfFameScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      final soundController = context.read<GameSoundController>();
+      soundController.background();
+      return null;
+    });
     final fame =
         useMemoized(() => globalContext.getProperty('fame'.toJS)) as Fame;
     final records = fame.records.toDart;

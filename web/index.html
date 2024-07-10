@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!--
-      If you are serving your web app in a path other than the root, change the
-      href value below to reflect the base path you are serving from.
-
-      The path provided below has to start and end with a slash "/" in order for
-      it to work correctly.
-
-      For more details:
-      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-      This is a placeholder for base href that will be replaced by the value of
-      the `--base-href` argument provided to `flutter build`.
-    -->
     <base href="$FLUTTER_BASE_HREF">
 
     <meta charset="UTF-8">
@@ -26,7 +13,6 @@
     <meta name="apple-mobile-web-app-title" content="game2048">
     <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png"/>
 
     <title>game2048</title>
@@ -34,6 +20,32 @@
     <script src="player.js"></script>
 </head>
 <body>
-<script src="flutter_bootstrap.js" async></script>
+<div id="tap_to_start"
+     style="visibility: hidden; left: 50%; top: 50%; transform: translate(-50%,-50%); position: absolute;">
+    <button id="tap_to_start_button">Tap to start</button>
+</div>
+<div id="loader"
+     style="left: 50%; top: 50%; transform: translate(-50%,-50%); position: absolute;"></div>
+<script>
+    {{flutter_js}}
+    {{flutter_build_config}}
+    const divLoader = document.querySelector('#loader');
+    const tapToStart = document.querySelector('#tap_to_start');
+    divLoader.textContent = "Loading game...";
+
+    _flutter.loader.load({
+      onEntrypointLoaded: async function(engineInitializer) {
+        divLoader.textContent = "Initializing engine...";
+        const appRunner = await engineInitializer.initializeEngine();
+        divLoader.style.display = "none";
+        tapToStart.style.visibility = "visible";
+        const button = document.querySelector("#tap_to_start_button");
+        button.onclick = async function () {
+          tapToStart.style.display = "none";
+          await appRunner.runApp();
+        };
+      }
+    });
+</script>
 </body>
 </html>

@@ -59,15 +59,12 @@ class GameScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final gameSoundController = useMemoized(() {
-      final controller = GameSoundController();
-      controller.init();
-      return controller;
+      final soundController = context.read<GameSoundController>();
+      soundController.ingame();
+      return soundController;
     });
     final player =
         useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
-    useEffect(() {
-      return gameSoundController.dispose;
-    }, const []);
 
     final state = context.watch<GameState>();
     if (state.forceFailed) {

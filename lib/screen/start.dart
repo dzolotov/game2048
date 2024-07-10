@@ -4,8 +4,10 @@ import 'dart:js_interop_unsafe';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:game2048/controllers/game_sound.dart';
 import 'package:game2048/main.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../interop/player.dart';
 
@@ -16,6 +18,11 @@ class StartScreen extends HookWidget {
   Widget build(BuildContext context) {
     final player =
         useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
+    useEffect(() {
+      final soundController = context.read<GameSoundController>();
+      soundController.background();
+      return null;
+    });
 
     return Scaffold(
       body: Center(
