@@ -18,7 +18,7 @@ window.player = {
 window.fame = {
   "records": [],
   "add": function(player, score) {
-    this.records.add({'player': player, 'score': score});
+    this.records.push({'player': player, 'score': score});
   }
 }
 

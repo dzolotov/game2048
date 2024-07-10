@@ -12,6 +12,8 @@ ADD web /tmp/web
 
 ADD assets /tmp/assets
 
+ADD shaders /tmp/shaders
+
 RUN flutter pub get
 
 RUN flutter build web

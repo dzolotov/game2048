@@ -61,10 +61,9 @@ class NumberSlot extends HookWidget {
             child: Text(
               p,
               style: TextStyle(
-                fontSize: fontSizes[p.length - 1].toDouble(),
-                fontFamily: 'Roboto',
-                color: Colors.black
-              ),
+                  fontSize: fontSizes[p.length - 1].toDouble(),
+                  fontFamily: 'Roboto',
+                  color: Colors.black),
             ),
           ),
         ),

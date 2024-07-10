@@ -1,48 +1,73 @@
-import 'dart:ui';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:game2048/main.dart';
 import 'package:go_router/go_router.dart';
 
-class StartScreen extends StatelessWidget {
+import '../interop/player.dart';
+
+class StartScreen extends HookWidget {
   const StartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final player =
+        useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
+
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Ya 2048',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const Divider(),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/game');
-              },
-              child: const Text('1️⃣ Start'),
-            ),
-            const Divider(),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/manual');
-              },
-              child: const Text('2⃣ Manual'),
-            ),
-            Transform.scale(
-              scaleY: -1,
-              child: SizedBox.square(
-                dimension: 256,
-                child: Fire(),
+        child: Form(
+          autovalidateMode: AutovalidateMode.always,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Ya 2048',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-          ],
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: FractionallySizedBox(
+                  widthFactor: 0.4,
+                  child: TextFormField(
+                    validator: (v) {
+                      if (v?.isEmpty != false) {
+                        return "Name is required";
+                      }
+                      return null;
+                    },
+                    autofocus: true,
+                    decoration: const InputDecoration(hintText: 'Player name'),
+                    onChanged: (name) => player.nickname = name,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.go('/game');
+                },
+                child: const Text('1️⃣ Start'),
+              ),
+              const Divider(),
+              ElevatedButton(
+                onPressed: () {
+                  context.go('/manual');
+                },
+                child: const Text('2⃣ Manual'),
+              ),
+              Transform.scale(
+                scaleY: -1, //flip the fire
+                child: SizedBox.square(
+                  dimension: 256,
+                  child: Fire(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -81,7 +106,7 @@ class _FireState extends State<Fire> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: ShaderView(time),
-      size: Size.square(128),
+      size: const Size.square(128),
     );
   }
 }

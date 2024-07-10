@@ -1,52 +1,22 @@
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:game2048/controllers/game_sound.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'dart:js_interop_unsafe';
-import 'package:web/web.dart' hide Navigator;
 
+import '../controllers/game_sound.dart';
 import '../game/data.dart';
 import '../game/state.dart';
+import '../interop/fame.dart';
+import '../interop/player.dart';
 import '../widgets/empty_slot.dart';
 import '../widgets/number_slot.dart';
-
-extension type Player(JSObject _) implements JSObject {
-  external String nickname;
-  external String greeting();
-}
-
-extension type FameEntry(JSObject _) implements JSObject {
-  external String player;
-  external int score;
-}
-
-extension type Fame(JSObject _) implements JSObject {
-  external JSArray<FameEntry> records;
-  external void add(String player, int score);
-}
-
-@JS()
-external JSNumber sum(ExternalDartReference reference);
-
-class NewGameIntent extends Intent {}
-
-class NewGameAction extends Action<NewGameIntent> {
-  GameState state;
-
-  NewGameAction(this.state);
-
-  @override
-  Object? invoke(NewGameIntent intent) {
-    state.reset();
-    return null;
-  }
-}
+import 'intents/action.dart';
+import 'intents/intent.dart';
 
 class GameScreen extends HookWidget {
   const GameScreen({super.key});
@@ -79,8 +49,11 @@ class GameScreen extends HookWidget {
         ),
       ),
     );
+    final player = globalContext.getProperty('player'.toJS) as Player;
+    final fame = globalContext.getProperty('fame'.toJS) as Fame;
+    fame.add(player.nickname, state.score);
     state.reset();
-    context.go('/');
+    context.go('/fame');
   }
 
   @override
@@ -90,28 +63,29 @@ class GameScreen extends HookWidget {
       controller.init();
       return controller;
     });
+    final player =
+        useMemoized(() => globalContext.getProperty('player'.toJS) as Player);
     useEffect(() {
-      final player = globalContext.getProperty('player'.toJS) as Player;
-      final fame = globalContext.getProperty('fame'.toJS) as Fame;
-      print(player.nickname);
-      print(player.greeting());
-      print(fame.records);
-      //todo: check emoji html renderer
-
-      // fame.add('Ivanov', 1231);
-      // print(fame.records);
       return gameSoundController.dispose;
     }, const []);
 
     final state = context.watch<GameState>();
+    if (state.forceFailed) {
+      Future(() {
+        gameOver(state, context);
+      });
+    }
     return Actions(
       actions: {
         NewGameIntent: NewGameAction(state),
+        DropGameIntent: DropGameAction(state),
       },
       child: Shortcuts(
         shortcuts: {
           LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN):
-              NewGameIntent()
+              NewGameIntent(),
+          LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyD):
+              DropGameIntent(),
         },
         child: SafeArea(
           child: Scaffold(
@@ -170,61 +144,78 @@ class GameScreen extends HookWidget {
                         await state.moveRight(gameSoundController);
                     }
                     if (state.finished()) {
-                      await gameOver(
+                      gameOver(
                         state,
                         context,
                       );
                     }
                   }
                 },
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final maxWidth =
-                        constraints.maxWidth > constraints.maxHeight
-                            ? constraints.maxHeight
-                            : constraints.maxWidth;
-                    final paddingLeft =
-                        constraints.maxWidth > constraints.maxHeight
-                            ? (constraints.maxWidth - constraints.maxHeight) / 2
-                            : 0;
-                    final paddingTop =
-                        constraints.maxHeight > constraints.maxWidth
-                            ? (constraints.maxHeight - constraints.maxWidth) / 2
-                            : 0;
-                    return Stack(
-                      children: [
-                        for (final (key, value) in state.grid.indexed) ...[
-                          Positioned(
-                            left: key % gridSize * maxWidth / gridSize +
-                                paddingLeft,
-                            top: (key ~/ gridSize) * maxWidth / gridSize +
-                                paddingTop,
-                            child: SizedBox.square(
-                              dimension: maxWidth / gridSize,
-                              child: const EmptySlot(),
-                            ),
-                          ),
-                          if (value != 0)
-                            Positioned(
-                              left: state.positions[key].dx *
-                                      maxWidth /
-                                      gridSize +
-                                  paddingLeft,
-                              top: state.positions[key].dy *
-                                      maxWidth /
-                                      gridSize +
-                                  paddingTop,
-                              child: SizedBox.square(
-                                dimension: maxWidth / gridSize,
-                                child: NumberSlot(
-                                  value,
+                child: Column(
+                  children: [
+                    Text(
+                      'Hi ${player.nickname}',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final maxWidth =
+                              constraints.maxWidth > constraints.maxHeight
+                                  ? constraints.maxHeight
+                                  : constraints.maxWidth;
+                          final paddingLeft = constraints.maxWidth >
+                                  constraints.maxHeight
+                              ? (constraints.maxWidth - constraints.maxHeight) /
+                                  2
+                              : 0;
+                          final paddingTop = constraints.maxHeight >
+                                  constraints.maxWidth
+                              ? (constraints.maxHeight - constraints.maxWidth) /
+                                  2
+                              : 0;
+                          return Stack(
+                            children: [
+                              for (final (key, value)
+                                  in state.grid.indexed) ...[
+                                Positioned(
+                                  left: key % gridSize * maxWidth / gridSize +
+                                      paddingLeft,
+                                  top: (key ~/ gridSize) * maxWidth / gridSize +
+                                      paddingTop,
+                                  child: SizedBox.square(
+                                    dimension: maxWidth / gridSize,
+                                    child: const EmptySlot(),
+                                  ),
                                 ),
-                              ),
-                            ),
-                        ]
-                      ],
-                    );
-                  },
+                                if (value != 0)
+                                  Positioned(
+                                    left: state.positions[key].dx *
+                                            maxWidth /
+                                            gridSize +
+                                        paddingLeft,
+                                    top: state.positions[key].dy *
+                                            maxWidth /
+                                            gridSize +
+                                        paddingTop,
+                                    child: SizedBox.square(
+                                      dimension: maxWidth / gridSize,
+                                      child: NumberSlot(
+                                        value,
+                                      ),
+                                    ),
+                                  ),
+                              ]
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    Text(
+                      'Score is ${state.score}, Average is ${state.average.toStringAsFixed(2)}',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
                 ),
               ),
             ),

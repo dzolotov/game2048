@@ -7,6 +7,10 @@ import '../controllers/game_sound.dart';
 import 'data.dart';
 
 class GameState with ChangeNotifier {
+  bool _forceFailed = false;
+
+  bool get forceFailed => _forceFailed;
+
   bool _animating = false;
 
   Completer _completer = Completer();
@@ -17,7 +21,10 @@ class GameState with ChangeNotifier {
 
   int get score => grid.reduce((a, b) => a + b);
 
+  double get average => score / (grid.where((e) => e != 0).length);
+
   void reset() {
+    _forceFailed = false;
     grid = List.generate(gridSize * gridSize, (_) => 0);
     place();
     place();
@@ -184,5 +191,10 @@ class GameState with ChangeNotifier {
     grid[rnd] = 2; //always 2
     positions[rnd] =
         Offset((rnd % gridSize).toDouble(), (rnd ~/ gridSize).toDouble());
+  }
+
+  void fail() {
+    _forceFailed = true;
+    notifyListeners();
   }
 }

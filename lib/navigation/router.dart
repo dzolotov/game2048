@@ -1,3 +1,4 @@
+import 'package:game2048/screen/hall_of_fame.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screen/game.dart';
@@ -19,5 +20,7 @@ final router = GoRouter(
       path: '/manual',
       builder: (context, state) => const ManualScreen(),
     ),
+    GoRoute(
+        path: '/fame', builder: (context, state) => const HallOfFameScreen()),
   ],
 );
