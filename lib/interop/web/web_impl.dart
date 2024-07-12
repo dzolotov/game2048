@@ -1,86 +1,59 @@
 import 'dart:convert';
 import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
 import 'dart:ui';
-import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:game2048/constants.dart';
 import 'package:web/web.dart' as web;
 
 import '../../screen/webgl/box3d.dart';
 
-extension type FameEntry(JSObject _) implements JSObject {
-  external String player;
-  external int score;
+class Player {
+  String nickname = '';
+  String salutation = '';
+
+  void setName(String name) {
+    nickname = name;
+  }
+
+  String greeting() => '${'Hello, $salutation'.trim()} $nickname';
 }
 
-extension type Fame(JSObject _) implements JSObject {
-  external JSArray<FameEntry> records;
+class FameEntry {
+  String player;
+  int score;
 
-  external void add(String player, int score);
-
-  external void clear();
+  FameEntry(this.player, this.score);
 }
 
-Fame get fame => globalContext.getProperty('fame'.toJS) as Fame;
+final _player = Player();
 
-List<FameEntry> get fameRecords => fame.records.toDart;
+Player get currentPlayer => _player;
 
-FameEntry createEmpty() {
-  final entry = JSObject() as FameEntry;
-  entry.player = '';
-  entry.score = -1;
-  return entry;
+final _fame = <FameEntry>[];
+
+get fameRecords => _fame;
+
+class Fame {
+  void add(String player, int score) => _fame.add(FameEntry(player, score));
+
+  void clear() => _fame.clear();
 }
 
-extension type Player(JSObject _) implements JSObject {
-  external String nickname;
+get fame => _fame;
 
-  external String salutation;
+FameEntry createEmpty() => FameEntry('', 0);
 
-  external void setName(String name);
+Future<int> power11() async => 2048;
 
-  external String greeting();
-}
-
-// Future<int> power11() async => 2048;
-// Future<int> power11() async {
-// final wasm =
-//     await instantiateStreaming(fetch('assets/assets/wasm_bg.wasm'), JSObject())
-//         .toDart;
-// return wasm.instance.exports.power(11);
-// }
-@JS('power')
-external int wasmPower(int n);
-
-@JS('getTitle')
-external String title(String str);
-
-Future<int> power11() async => wasmPower(11);
-
-// Future<String> getTitle() async => "Ya ${await power11()}";
-Future<String> getTitle() async => title((await power11()).toString());
-
-Player get currentPlayer => globalContext.getProperty('player'.toJS) as Player;
+Future<String> getTitle() async => "Ya ${await power11()}";
 
 bool get confirmForceQuit =>
     web.window.confirm('Are you sure to drop the game?');
 
-void registerIFrame(BuildContext context) {
-  ui_web.PlatformViewRegistry().registerViewFactory(
-    'manual',
-    (_) {
-      return web.HTMLIFrameElement()
-        ..width = '100%'
-        ..height = '100%'
-        ..src = manualUrl;
-    },
-  );
-}
+void registerIFrame(BuildContext context) {}
 
 void makeScreenshot(BuildContext context, GlobalKey screenshotKey) {
   SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -104,10 +77,9 @@ class GLWidget extends StatelessWidget {
 
 void setPathStrategy() => setUrlStrategy(PathUrlStrategy());
 
-final localSettings = web.window.localStorage;
-
-String? getSetting(String key) => localSettings.getItem(key);
-
-void setSetting(String key, String value) => localSettings.setItem(key, value);
-
 Future<void> initEnvironment() async {}
+
+//stub implementation
+String? getSetting(String key) => 'true';
+
+setSetting(String key, String value) {}

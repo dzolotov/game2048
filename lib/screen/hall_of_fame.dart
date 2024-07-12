@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/game_sound.dart';
-// import '../interop/web/web_impl.dart';
-import '../interop/universal_export.dart';
+import '../interop/web/web_impl.dart';
+// import '../interop/universal_export.dart';
 
 class HallOfFameEntry extends StatelessWidget {
   final String login;
