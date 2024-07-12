@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		282788B82C4111EC00916124 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 282788B72C4111EC00916124 /* utils.c */; };
+		282788D92C413B0800916124 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 282788D82C413B0800916124 /* utils.c */; };
 		32EDAE984FBDE3952AF394F4 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A823813D859013288D3580 /* Pods_Runner.framework */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
@@ -63,8 +63,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		282788B62C4111EC00916124 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		282788B72C4111EC00916124 /* utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		282788D72C413B0800916124 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		282788D82C413B0800916124 /* utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -141,8 +141,8 @@
 				33CC10EE2044A3C60003C045 /* Products */,
 				D73912EC22F37F3D000D13A0 /* Frameworks */,
 				61E21056C8B9F5AEA3A1924C /* Pods */,
-				282788B62C4111EC00916124 /* utils.h */,
-				282788B72C4111EC00916124 /* utils.c */,
+				282788D72C413B0800916124 /* utils.h */,
+				282788D82C413B0800916124 /* utils.c */,
 			);
 			sourceTree = "<group>";
 		};
@@ -443,7 +443,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */,
-				282788B82C4111EC00916124 /* utils.c in Sources */,
+				282788D92C413B0800916124 /* utils.c in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 			);

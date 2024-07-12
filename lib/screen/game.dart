@@ -54,7 +54,6 @@ class GameScreen extends HookWidget {
     final player = currentPlayer;
     fame.add(player.nickname, state.score);
     state.reset();
-    print('State is reset');
     context.go('/fame');
   }
 
@@ -90,7 +89,7 @@ class GameScreen extends HookWidget {
             body: Column(
               children: [
                 Text(
-                  'Hi ${player.nickname}',
+                  player.greeting(),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Expanded(

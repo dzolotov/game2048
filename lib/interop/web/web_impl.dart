@@ -14,14 +14,14 @@ import '../../screen/webgl/box3d.dart';
 extension type FameEntry(JSObject _) implements JSObject {
   external String player;
   external int score;
-
-  String asString() => "Player: $player, Score: $score";
 }
 
 extension type Fame(JSObject _) implements JSObject {
   external JSArray<FameEntry> records;
 
   external void add(String player, int score);
+
+  external void clear();
 }
 
 Fame get fame => globalContext.getProperty('fame'.toJS) as Fame;

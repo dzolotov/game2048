@@ -1,4 +1,5 @@
 import 'dart:ffi' as ffi;
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:ffi/ffi.dart';
@@ -13,50 +14,139 @@ import 'package:universal_platform/universal_platform.dart';
 
 late SharedPreferences prefs;
 
+late Pointer<NativePerson> personPtr;
+late Pointer<NativeFameEntry> emptyEntry;
+
 Future<void> initEnvironment() async {
   prefs = await SharedPreferences.getInstance();
+  personPtr = calloc<NativePerson>();
+  final initialName = 'Shmr 2024'.toNativeUtf8(allocator: calloc);
+  personPtr.ref.name = initialName.cast();
+  const initialSalutation = '';
+  personPtr.ref.salutation =
+      initialSalutation.toNativeUtf8(allocator: calloc).cast();
+  emptyEntry = calloc<NativeFameEntry>();
+  emptyEntry.ref.score = 0;
+  emptyEntry.ref.name = ''.toNativeUtf8(allocator: calloc).cast();
+}
+
+class Player {
+  String get nickname => personPtr.ref.name.cast<Utf8>().toDartString();
+
+  set salutation(String value) {
+    //avoid memory leak
+    calloc.free(personPtr.ref.salutation);
+    personPtr.ref.salutation = value.toNativeUtf8(allocator: calloc).cast();
+  }
+
+  void setName(String name) {
+    //avoid memory leak
+    calloc.free(personPtr.ref.name);
+    personPtr.ref.name = name.toNativeUtf8(allocator: calloc).cast();
+  }
+
+  String greeting() {
+    Pointer<Char>? result;
+    using((arena) {
+      //используем аллокатор arena для автоматического управления памятью
+      final space = arena.using(' ', (p) {
+        debugPrint('Memory automatically released');
+      }).toNativeUtf8(allocator: arena);
+
+      Pointer<Char> playerName;
+      //если не пустое приветствие - соединяем его с пробелом и именем игрока
+      if (personPtr.ref.salutation.value != 0) {
+        //в пустой строке первый байт будет =0
+        playerName = lib.mergeStrings(personPtr.ref.salutation, space.cast());
+        playerName = lib.mergeStrings(playerName, personPtr.ref.name);
+      } else {
+        //если нет приветствия - просто используем имя игрока
+        playerName = personPtr.ref.name;
+      }
+      //соединяем префикс Hi.
+      final hi = arena.using('Hi (from desktop), ', (_) {
+        debugPrint('Hi from desktop string deallocated');
+      }).toNativeUtf8(allocator: arena);
+      result = lib.mergeStrings(hi.cast(), playerName);
+    });
+    if (result != null) {
+      final r = result!.cast<Utf8>().toDartString();
+      lib.memory_free(result!);
+      return r;
+    } else {
+      return '?';
+    }
+  }
 }
 
 class FameEntry {
   String player = '';
   int score = 0;
+}
 
-  String asString() => "Player: $player, Score: $score";
+extension on NativeFameEntry {
+  FameEntry toFameEntry() => FameEntry()
+    ..player = name.cast<Utf8>().toDartString()
+    ..score = score;
+}
+
+List<FameEntry> get fameRecords {
+  Pointer<NativeFameEntry> current = lib.getFirst();
+  List<FameEntry> result = [];
+  //связанный список -> Dart List
+  while (current.address != 0) {
+    result.add(current.ref.toFameEntry());
+    current = current.ref.next.cast();
+  }
+  return result;
 }
 
 class Fame {
-  List<FameEntry> records = [];
-
   void add(String player, int score) {
-    records.add(FameEntry()
-      ..player = player
-      ..score = score);
+    final nativeEntry = calloc<NativeFameEntry>();
+    nativeEntry.ref.name = player.toNativeUtf8(allocator: calloc).cast();
+    nativeEntry.ref.score = score;
+    lib.addFameEntry(nativeEntry);
   }
+
+  void clear() => lib.clearFameEntries();
 }
+
+FameEntry createEmpty() => emptyEntry.ref.toFameEntry();
+
+// class Fame {
+//   List<FameEntry> records = [];
+//
+//   void add(String player, int score) {
+//     records.add(FameEntry()
+//       ..player = player
+//       ..score = score);
+//   }
+// }
 
 final _fame = Fame();
 
 Fame get fame => _fame;
 
-List<FameEntry> get fameRecords => fame.records;
+// List<FameEntry> get fameRecords => fame.records;
 
-FameEntry createEmpty() {
-  final empty = FameEntry()
-    ..player = ''
-    ..score = -1;
-  return empty;
-}
+// FameEntry createEmpty() {
+//   final empty = FameEntry()
+//     ..player = ''
+//     ..score = -1;
+//   return empty;
+// }
 
-class Player {
-  String nickname = '';
-
-  String salutation = '';
-
-  void setName(String name) => nickname = name;
-
-  String greeting() => '${'Hi, $salutation'.trim()} $nickname';
-}
-
+// class Player {
+//   String nickname = '';
+//
+//   String salutation = '';
+//
+//   void setName(String name) => nickname = name;
+//
+//   String greeting() => '${'Hi, $salutation'.trim()} $nickname';
+// }
+//
 final _player = Player();
 
 Player get currentPlayer => _player;
@@ -82,7 +172,7 @@ Future<String> getTitle() async {
   final power = await power11();
   const prefix = 'Ya.Game.Desktop/Mobile ';
   final content = power.toString();
-  final p = lib.usePrefix(
+  final p = lib.mergeStrings(
     prefix.toNativeUtf8().cast(),
     content.toNativeUtf8().cast(),
   );

@@ -31,21 +31,21 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Int)>>('power');
   late final _power = _powerPtr.asFunction<int Function(int)>();
 
-  ffi.Pointer<ffi.Char> usePrefix(
+  ffi.Pointer<ffi.Char> mergeStrings(
     ffi.Pointer<ffi.Char> arg0,
     ffi.Pointer<ffi.Char> arg1,
   ) {
-    return _usePrefix(
+    return _mergeStrings(
       arg0,
       arg1,
     );
   }
 
-  late final _usePrefixPtr = _lookup<
+  late final _mergeStringsPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<ffi.Char> Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('usePrefix');
-  late final _usePrefix = _usePrefixPtr.asFunction<
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('mergeStrings');
+  late final _mergeStrings = _mergeStringsPtr.asFunction<
       ffi.Pointer<ffi.Char> Function(
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
@@ -62,4 +62,69 @@ class NativeLibrary {
           'memory_free');
   late final _memory_free =
       _memory_freePtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
+
+  void set_name(
+    ffi.Pointer<NativePerson> arg0,
+    ffi.Pointer<ffi.Char> arg1,
+  ) {
+    return _set_name(
+      arg0,
+      arg1,
+    );
+  }
+
+  late final _set_namePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<NativePerson>, ffi.Pointer<ffi.Char>)>>('set_name');
+  late final _set_name = _set_namePtr.asFunction<
+      void Function(ffi.Pointer<NativePerson>, ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<NativeFameEntry> getFirst() {
+    return _getFirst();
+  }
+
+  late final _getFirstPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<NativeFameEntry> Function()>>(
+          'getFirst');
+  late final _getFirst =
+      _getFirstPtr.asFunction<ffi.Pointer<NativeFameEntry> Function()>();
+
+  void addFameEntry(
+    ffi.Pointer<NativeFameEntry> entry,
+  ) {
+    return _addFameEntry(
+      entry,
+    );
+  }
+
+  late final _addFameEntryPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<NativeFameEntry>)>>(
+      'addFameEntry');
+  late final _addFameEntry = _addFameEntryPtr
+      .asFunction<void Function(ffi.Pointer<NativeFameEntry>)>();
+
+  void clearFameEntries() {
+    return _clearFameEntries();
+  }
+
+  late final _clearFameEntriesPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('clearFameEntries');
+  late final _clearFameEntries =
+      _clearFameEntriesPtr.asFunction<void Function()>();
+}
+
+final class NativePerson extends ffi.Struct {
+  external ffi.Pointer<ffi.Char> salutation;
+
+  external ffi.Pointer<ffi.Char> name;
+}
+
+final class NativeFameEntry extends ffi.Struct {
+  external ffi.Pointer<ffi.Char> name;
+
+  @ffi.Int()
+  external int score;
+
+  external ffi.Pointer<ffi.Void> next;
 }

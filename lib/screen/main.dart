@@ -23,7 +23,10 @@ class AppWidget extends HookWidget {
     );
     useEffect(() {
       gameSoundController.init();
-      return gameSoundController.dispose;
+      return () {
+        gameSoundController.dispose;
+        fame.clear();
+      };
     });
     // precacheImage(const AssetImage('assets/fail_stamp.jpg'), context);
     return Provider.value(
@@ -47,7 +50,8 @@ class WrapWithMenuBar extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!UniversalPlatform.isMacOS) {
       return child;
-    };
+    }
+    ;
     return PlatformMenuBar(
       menus: [
         PlatformMenu(
