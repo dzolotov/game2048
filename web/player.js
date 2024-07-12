@@ -6,7 +6,7 @@ window.player = {
     window.logger.nameIsChanged(name);
   },
   "greeting": function() {
-    return ('Hi '+salutation).trim()+' '+nickname;
+    return ('Hi '+this.salutation).trim()+' '+this.nickname;
   }
 }
 
