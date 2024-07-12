@@ -8,7 +8,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:game2048/constants.dart';
 import 'package:web/web.dart' as web;
+
 import '../../screen/webgl/box3d.dart';
 
 extension type FameEntry(JSObject _) implements JSObject {
@@ -65,16 +67,17 @@ Future<String> getTitle() async => title((await power11()).toString());
 
 Player get currentPlayer => globalContext.getProperty('player'.toJS) as Player;
 
-bool get confirmForceQuit => web.window.confirm('Are you sure to drop the game?');
+bool get confirmForceQuit =>
+    web.window.confirm('Are you sure to drop the game?');
 
-void registerIFrame() {
+void registerIFrame(BuildContext context) {
   ui_web.PlatformViewRegistry().registerViewFactory(
     'manual',
     (_) {
       return web.HTMLIFrameElement()
         ..width = '100%'
         ..height = '100%'
-        ..src = 'https://ru.wikipedia.org/wiki/2048_(игра)';
+        ..src = manualUrl;
     },
   );
 }
@@ -82,7 +85,7 @@ void registerIFrame() {
 void makeScreenshot(BuildContext context, GlobalKey screenshotKey) {
   SchedulerBinding.instance.addPostFrameCallback((_) async {
     final scr = screenshotKey.currentContext?.findRenderObject()
-    as RenderRepaintBoundary;
+        as RenderRepaintBoundary;
     final image = await scr.toImage();
     final bytes = (await image.toByteData(format: ImageByteFormat.png))!
         .buffer

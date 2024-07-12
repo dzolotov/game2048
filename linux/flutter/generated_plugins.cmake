@@ -4,8 +4,8 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
+  desktop_webview_window
   irondash_engine_context
-  local_notifier
   super_native_extensions
 )
 

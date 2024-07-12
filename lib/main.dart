@@ -10,6 +10,7 @@ import 'screen/main.dart';
 
 late FragmentProgram fireProgram;
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //load shaders

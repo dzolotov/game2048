@@ -145,14 +145,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.10"
-  desktop_notifications:
-    dependency: transitive
+  desktop_webview_window:
+    dependency: "direct main"
     description:
-      name: desktop_notifications
-      sha256: "6d92694ad6e9297a862c5ff7dd6b8ff64c819972557754769f819d2209612927"
+      name: desktop_webview_window
+      sha256: "57cf20d81689d5cbb1adfd0017e96b669398a669d927906073b0e42fc64111c0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.3"
+    version: "0.2.3"
   device_info_plus:
     dependency: transitive
     description:
@@ -222,14 +222,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_cache_manager:
-    dependency: transitive
-    description:
-      name: flutter_cache_manager
-      sha256: "395d6b7831f21f3b989ebedbb785545932adb9afe2622c1ffacf7f4b53a7e544"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.2"
   flutter_hooks:
     dependency: "direct main"
     description:
@@ -368,14 +360,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  local_notifier:
-    dependency: transitive
-    description:
-      name: local_notifier
-      sha256: f6cfc933c6fbc961f4e52b5c880f68e41b2d3cd29aad557cc654fd211093a025
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
   logging:
     dependency: transitive
     description:
@@ -520,14 +504,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.5"
-  platform_local_notifications:
-    dependency: "direct main"
-    description:
-      name: platform_local_notifications
-      sha256: b726fa61703beafee964d882f4089bb498b055abc3c0980e27f49d99e16d73e3
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -544,14 +520,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
-  quick_notify_2:
-    dependency: transitive
-    description:
-      name: quick_notify_2
-      sha256: deeaba9fcfc052e762909340f6c961dcd47bd0f4a389f4e5949a8224e3516dda
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0-dev.0"
   quiver:
     dependency: transitive
     description:
@@ -560,14 +528,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -645,22 +605,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  sqflite:
-    dependency: transitive
-    description:
-      name: sqflite
-      sha256: a43e5a27235518c03ca238e7b4732cf35eabe863a369ceba6cbefa537a66f16d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.3+1"
-  sqflite_common:
-    dependency: transitive
-    description:
-      name: sqflite_common
-      sha256: "3da423ce7baf868be70e2c0976c28a1bb2f73644268b7ffa7d2e08eab71f16a4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.4"
   stack_trace:
     dependency: transitive
     description:

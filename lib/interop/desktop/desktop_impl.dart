@@ -2,12 +2,16 @@ import 'dart:ffi' as ffi;
 import 'dart:ffi';
 import 'dart:ui';
 
+import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:game2048/constants.dart';
 import 'package:game2048/interop/desktop/generated_bindings.dart';
+import 'package:game2048/methodchannel/notifications_plugin.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:super_clipboard/super_clipboard.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -17,7 +21,10 @@ late SharedPreferences prefs;
 late Pointer<NativePerson> personPtr;
 late Pointer<NativeFameEntry> emptyEntry;
 
+late NotificationsPlugin notificationsPlugin;
+
 Future<void> initEnvironment() async {
+  notificationsPlugin = NotificationsPlugin();
   prefs = await SharedPreferences.getInstance();
   personPtr = calloc<NativePerson>();
   final initialName = 'Shmr 2024'.toNativeUtf8(allocator: calloc);
@@ -28,6 +35,10 @@ Future<void> initEnvironment() async {
   emptyEntry = calloc<NativeFameEntry>();
   emptyEntry.ref.score = 0;
   emptyEntry.ref.name = ''.toNativeUtf8(allocator: calloc).cast();
+  if (runWebViewTitleBarWidget([])) {
+    return;
+  }
+  await notificationsPlugin.requestPermission();
 }
 
 class Player {
@@ -157,7 +168,20 @@ bool get confirmForceQuit => true;
 void setPathStrategy() {}
 
 //also ignore for desktop
-void registerIFrame() {}
+void registerIFrame(BuildContext context) {
+  Future(
+    () async {
+      final webview = await WebviewWindow.create();
+      webview.launch(manualUrl);
+      notificationsPlugin.showNotification(
+        title: 'Manual is shown',
+        subtitle: 'User manual is ready',
+        body: 'You can read the manual in the separate window',
+      );
+      context.go('/');
+    },
+  );
+}
 
 final nativeLibrary = ffi.DynamicLibrary.process();
 final lib = NativeLibrary(nativeLibrary);
@@ -221,3 +245,13 @@ String? getSetting(String key) => prefs.getBool(key)?.toString();
 
 void setSetting(String key, String value) =>
     prefs.setBool(key, bool.tryParse(value) ?? false);
+
+Future<bool?> showNotification(
+        {required String title,
+        required String subtitle,
+        required String body}) =>
+    notificationsPlugin.showNotification(
+      title: title,
+      subtitle: subtitle,
+      body: body,
+    );

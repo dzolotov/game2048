@@ -49,4 +49,5 @@ void clearFameEntries() {
         current = current->next;
         free(local);
     }
+    first = 0;  //reset pointer
 }

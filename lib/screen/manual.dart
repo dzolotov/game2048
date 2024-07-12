@@ -15,8 +15,7 @@ class _ManualScreenState extends State<ManualScreen> {
   @override
   void initState() {
     super.initState();
-    // showNotification(1, 'Manual is shown', 'Manual page is opened');
-    registerIFrame(); //only for Flutter Web
+    registerIFrame(context);
   }
 
   @override
@@ -25,5 +24,5 @@ class _ManualScreenState extends State<ManualScreen> {
       : Scaffold(
           appBar: AppBar(),
           body: const SizedBox.shrink(),
-        ); //todo: in app webview
+        );
 }
