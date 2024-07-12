@@ -4,9 +4,6 @@ window.player = {
     this.nickname = name;
     window.logger.nameIsChanged(name);
   },
-  "greeting": function() {
-    return "Mr "+this.nickname;
-  }
 }
 
 window.fame = {

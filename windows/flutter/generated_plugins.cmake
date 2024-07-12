@@ -4,6 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
+  irondash_engine_context
+  local_notifier
+  quick_notify_2
+  super_native_extensions
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

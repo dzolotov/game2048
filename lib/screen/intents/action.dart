@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../interop/desktop_impl.dart';
+// import '../../interop/web/web_impl.dart';
+import '../../interop/universal_export.dart';
 
 import '../../game/state.dart';
 import 'intent.dart';

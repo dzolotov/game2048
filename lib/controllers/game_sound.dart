@@ -7,20 +7,38 @@ class GameSoundController {
   late AudioContext context;
   late AudioPlayer? soundPlayer;
   StreamSubscription? subscription;
-  bool isBackground = false;
+  bool isInMenu = false;
+  bool _backgroundMusicEnabled = true;
+  bool _soundEffectsEnabled = true;
 
-  Future<void> moveEffect() async => await soundPlayer
-      ?.play(AssetSource('682635__bastianhallo__magic-spell.mp3'));
+  void setBackgroundMusicEnabled(bool value) => _backgroundMusicEnabled = value;
 
-  Future<void> mergeEffect() async =>
+  void setSoundEffectsEnabled(bool value) => _soundEffectsEnabled = value;
+
+  Future<void> moveEffect() async {
+    if (_soundEffectsEnabled) {
+      await soundPlayer
+          ?.play(AssetSource('682635__bastianhallo__magic-spell.mp3'));
+    }
+    ;
+  }
+
+  Future<void> mergeEffect() async {
+    if (_soundEffectsEnabled) {
       await soundPlayer?.play(AssetSource('65733__erdie__bow01.mp3'));
+    }
+  }
 
-  Future<void> ingame() async {
-    if (!isBackground) {
+  Future<void> ingameMusic() async {
+    if (!_backgroundMusicEnabled) {
       return;
     }
-    isBackground = false;
-    await audioPlayer?.play(AssetSource('Sakura-Girl-Daisy-chosic.com_original.mp3'));
+    if (!isInMenu) {
+      return;
+    }
+    isInMenu = false;
+    await audioPlayer
+        ?.play(AssetSource('Sakura-Girl-Daisy-chosic.com_original.mp3'));
     audioPlayer?.setVolume(0.3);
     subscription = audioPlayer?.onPlayerStateChanged.listen((state) async {
       if (state == PlayerState.completed) {
@@ -30,11 +48,19 @@ class GameSoundController {
     });
   }
 
-  Future<void> background() async {
-    if (isBackground) {
+  Future<void> stopBackground() async {
+    await audioPlayer?.stop();
+    isInMenu = false;
+  }
+
+  Future<void> menuMusic() async {
+    if (!_backgroundMusicEnabled) {
       return;
     }
-    isBackground = true;
+    if (isInMenu) {
+      return;
+    }
+    isInMenu = true;
     await audioPlayer?.play(AssetSource('A.Cooper-LastTrack.mp3'));
     audioPlayer?.setVolume(0.3);
     subscription = audioPlayer?.onPlayerStateChanged.listen((state) async {
@@ -51,7 +77,7 @@ class GameSoundController {
     soundPlayer = AudioPlayer(playerId: 'sound');
     soundPlayer?.setVolume(1.0);
     await soundPlayer?.setPlayerMode(PlayerMode.lowLatency);
-    await background();
+    await menuMusic();
   }
 
   Future<void> dispose() async {

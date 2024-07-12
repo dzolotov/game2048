@@ -10,14 +10,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider:
-  go_router:
+  provider: ^6.1.2
+  go_router: ^14.2.0
   flutter_web_plugins:
     sdk: flutter
-  audioplayers:
+  audioplayers: 6.0.0
   flutter_hooks: ^0.20.0
   universal_platform: ^1.0.0+1
-#  flutter_local_notifications:
+  shared_preferences: ^2.2.3
+  macos_ui: ^2.0.0
+  macos_window_utils: ^1.5.0
+  flutter_local_notifications: ^17.2.0
+  super_clipboard: ^0.8.0
+  platform_local_notifications: ^1.0.0
   # flutter_webview only for Android/iOS
   #  flutter_inappwebview:
 
@@ -34,11 +39,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
-    - assets/fail_stamp.jpg
+    - assets/pkg/
     - assets/Sakura-Girl-Daisy-chosic.com_original.mp3
     - assets/A.Cooper-LastTrack.mp3
     - assets/65733__erdie__bow01.mp3
     - assets/682635__bastianhallo__magic-spell.mp3
+    - assets/fail_stamp.jpg
   shaders:
     - shaders/fire.frag

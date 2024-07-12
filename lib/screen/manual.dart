@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../interop/web_impl.dart';
+// import '../interop/web/web_impl.dart';
+import '../interop/universal_export.dart';
 
 class ManualScreen extends StatefulWidget {
   const ManualScreen({super.key});
@@ -11,8 +12,6 @@ class ManualScreen extends StatefulWidget {
 }
 
 class _ManualScreenState extends State<ManualScreen> {
-  // late InAppWebViewController _controller;
-
   @override
   void initState() {
     super.initState();
@@ -22,7 +21,7 @@ class _ManualScreenState extends State<ManualScreen> {
 
   @override
   Widget build(BuildContext context) => kIsWeb
-      ? const SizedBox.shrink() //todo: replace with HTMLElementView
+      ? const HtmlElementView(viewType: 'manual')
       : Scaffold(
           appBar: AppBar(),
           body: const SizedBox.shrink(),
