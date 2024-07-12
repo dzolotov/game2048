@@ -40,6 +40,10 @@ class GameSoundController {
     await audioPlayer
         ?.play(AssetSource('Sakura-Girl-Daisy-chosic.com_original.mp3'));
     audioPlayer?.setVolume(0.3);
+    if (subscription != null) {
+      subscription!.cancel();
+      subscription = null;
+    }
     subscription = audioPlayer?.onPlayerStateChanged.listen((state) async {
       if (state == PlayerState.completed) {
         await audioPlayer?.seek(Duration.zero);
@@ -63,6 +67,10 @@ class GameSoundController {
     isInMenu = true;
     await audioPlayer?.play(AssetSource('A.Cooper-LastTrack.mp3'));
     audioPlayer?.setVolume(0.3);
+    if (subscription != null) {
+      subscription!.cancel();
+      subscription = null;
+    }
     subscription = audioPlayer?.onPlayerStateChanged.listen((state) async {
       if (state == PlayerState.completed) {
         await audioPlayer?.seek(Duration.zero);

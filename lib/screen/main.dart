@@ -29,20 +29,36 @@ class AppWidget extends HookWidget {
     return Provider.value(
       value: gameSoundController,
       child: UniversalPlatform.isMacOS
-          ? PlatformMenuBar(
-              menus: [
-                PlatformMenu(
-                  label: 'Game',
-                  menus: [
-                    PlatformMenuItem(
-                        label: 'Hall of Fame',
-                        onSelected: () => context.go('/fame')),
-                  ],
-                )
-              ],
-              child: MacosApp.router(routerConfig: router),
-            )
+          ? MacosApp.router(routerConfig: router)
           : MaterialApp.router(routerConfig: router),
+    );
+  }
+}
+
+class WrapWithMenuBar extends StatelessWidget {
+  final Widget child;
+
+  const WrapWithMenuBar({
+    required this.child,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (!UniversalPlatform.isMacOS) {
+      return child;
+    };
+    return PlatformMenuBar(
+      menus: [
+        PlatformMenu(
+          label: 'Game',
+          menus: [
+            PlatformMenuItem(
+                label: 'Hall of Fame', onSelected: () => context.go('/fame')),
+          ],
+        )
+      ],
+      child: child,
     );
   }
 }

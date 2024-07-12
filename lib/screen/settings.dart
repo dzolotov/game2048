@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:game2048/interop/desktop/desktop_impl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/game_sound.dart';
+import '../interop/universal_export.dart';
 
 class SettingsScreen extends HookWidget {
   const SettingsScreen({super.key});

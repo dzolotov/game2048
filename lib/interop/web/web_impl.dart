@@ -38,28 +38,30 @@ FameEntry createEmpty() {
 extension type Player(JSObject _) implements JSObject {
   external String nickname;
 
+  external String salutation;
+
   external void setName(String name);
 
   external String greeting();
 }
 
-Future<int> power11() async => 2048;
+// Future<int> power11() async => 2048;
 // Future<int> power11() async {
 // final wasm =
 //     await instantiateStreaming(fetch('assets/assets/wasm_bg.wasm'), JSObject())
 //         .toDart;
 // return wasm.instance.exports.power(11);
 // }
-// @JS('power')
-// external int wasmPower(int n);
+@JS('power')
+external int wasmPower(int n);
 
-// @JS('getTitle')
-// external String title(String str);
+@JS('getTitle')
+external String title(String str);
 
-// Future<int> power11() async => wasmPower(11);
+Future<int> power11() async => wasmPower(11);
 
-Future<String> getTitle() async => "Ya ${await power11()}";
-// Future<String> getTitle() async => title((await power11()).toString());
+// Future<String> getTitle() async => "Ya ${await power11()}";
+Future<String> getTitle() async => title((await power11()).toString());
 
 Player get currentPlayer => globalContext.getProperty('player'.toJS) as Player;
 
@@ -94,12 +96,10 @@ void makeScreenshot(BuildContext context, GlobalKey screenshotKey) {
 
 class GLWidget extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Box3D();
+  Widget build(BuildContext context) => const Box3D();
 }
 
 void setPathStrategy() => setUrlStrategy(PathUrlStrategy());
-
-Future<void> showNotification(int id, String title, String body) async {}
 
 final localSettings = web.window.localStorage;
 

@@ -1,10 +1,12 @@
+import 'dart:ffi' as ffi;
 import 'dart:ui';
 
+import 'package:ffi/ffi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:platform_local_notifications/platform_local_notifications.dart';
+import 'package:game2048/interop/desktop/generated_bindings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:super_clipboard/super_clipboard.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -13,9 +15,6 @@ late SharedPreferences prefs;
 
 Future<void> initEnvironment() async {
   prefs = await SharedPreferences.getInstance();
-  await PlatformNotifier.I.init(appName: '2048');
-  final p = await PlatformNotifier.I.requestPermissions();
-  print('Accepted is $p');
 }
 
 class FameEntry {
@@ -51,9 +50,11 @@ FameEntry createEmpty() {
 class Player {
   String nickname = '';
 
+  String salutation = '';
+
   void setName(String name) => nickname = name;
 
-  String greeting() => 'Hi, $nickname';
+  String greeting() => '${'Hi, $salutation'.trim()} $nickname';
 }
 
 final _player = Player();
@@ -68,15 +69,26 @@ void setPathStrategy() {}
 //also ignore for desktop
 void registerIFrame() {}
 
-Future<String> getTitle() async => "Ya.Game.Desktop/Mobile 2048";
+final nativeLibrary = ffi.DynamicLibrary.process();
+final lib = NativeLibrary(nativeLibrary);
 
-Future<void> showNotification(
-    BuildContext context, String title, String body) async {
-  await PlatformNotifier.I.showPluginNotification(
-    ShowPluginNotificationModel(
-        id: DateTime.now().second, title: title, body: body),
-    context,
+Future<int> power11() async {
+  return 2048;
+  return lib.power(11);
+}
+
+Future<String> getTitle() async {
+  // return "Ya.Game.Desktop/Mobile 2048";
+  final power = await power11();
+  const prefix = 'Ya.Game.Desktop/Mobile ';
+  final content = power.toString();
+  final p = lib.usePrefix(
+    prefix.toNativeUtf8().cast(),
+    content.toNativeUtf8().cast(),
   );
+  final s = p.cast<Utf8>().toDartString();
+  lib.memory_free(p);
+  return s;
 }
 
 void makeScreenshot(BuildContext context, GlobalKey screenshotKey) {

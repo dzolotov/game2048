@@ -1,5 +1,6 @@
 window.player = {
   "nickname": "Shmr2024",
+  "salutation": "",
   "setName": function(name) {
     this.nickname = name;
     window.logger.nameIsChanged(name);
